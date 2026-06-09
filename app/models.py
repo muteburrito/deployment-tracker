@@ -25,3 +25,15 @@ class Deployment(BaseModel):
 class DeploymentListResponse(BaseModel):
     count: int
     data: list[Deployment]
+
+
+class DeploymentMetrics(BaseModel):
+    service: DeploymentService
+    deployment_frequency: float
+    failure_rate: float
+    p95_duration: int
+
+
+class DeploymentMetricsResponse(BaseModel):
+    count: int
+    data: list[DeploymentMetrics]

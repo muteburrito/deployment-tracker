@@ -1,7 +1,13 @@
 from fastapi import FastAPI, HTTPException
 
 from app import services
-from app.models import Deployment, DeploymentListResponse, DeploymentService, DeploymentStatus
+from app.models import (
+    Deployment,
+    DeploymentListResponse,
+    DeploymentMetricsResponse,
+    DeploymentService,
+    DeploymentStatus,
+)
 
 app = FastAPI(title="Deployment API")
 
@@ -19,6 +25,19 @@ def list_deployments(
     deployments = services.list_deployments(service=service, status=status)
 
     return DeploymentListResponse(count=len(deployments), data=deployments)
+
+
+@app.get("/metrics", response_model=DeploymentMetricsResponse)
+def get_metrics(time_range: str | None = None):
+    try:
+        metrics = services.get_deployment_metrics(time_range=time_range)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail=str(exc),
+        ) from exc
+
+    return DeploymentMetricsResponse(count=len(metrics), data=metrics)
 
 
 @app.get("/deployments/{deployment_id}", response_model=Deployment)

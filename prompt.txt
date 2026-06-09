@@ -1,0 +1,1 @@
+Add a /metrics endpoint that computes deployment frequency, failure rate, and p95 duration per service. Support a time_range query parameter, for example ?time_range=7d. Return results grouped by service.
